@@ -1,7 +1,7 @@
-package com.messageBroker.eventpublisher.endpoint;
+package org.messageBroker.endpoint;
 
-import com.messageBroker.eventpublisher.config.MessageSender;
-import com.messageBroker.eventpublisher.model.EventModel;
+import org.messageBroker.config.MessageSender;
+import org.messageBroker.model.EventModel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -27,10 +27,10 @@ public class EventPublishController {
      * @param routingKey
      * @param eventModel
      */
-    @PostMapping("/v1/publish/quorom/developer")
-    public void publishToQuoromDeveloperQueue(@RequestParam("exchangeName") String exchange, @RequestParam("routingKey") String routingKey,  @RequestBody EventModel eventModel){
+    @PostMapping("/v1/publish/stream/developer")
+    public void publishToStreamDeveloperQueue(@RequestParam("exchangeName") String exchange, @RequestParam("routingKey") String routingKey,  @RequestBody EventModel eventModel){
         LOGGER.info("Inside publish developer queue start");
-        messageSender.sendToQuoromDeveloperQueue(exchange, routingKey, eventModel);
+        messageSender.sendToStreamDeveloperQueue(exchange, routingKey, eventModel);
         LOGGER.info("Inside publish developer queue end");
     }
 
@@ -40,10 +40,10 @@ public class EventPublishController {
      * @param exchange
      * @param eventModel
      */
-    @PostMapping("/v1/publish/quorom/team")
+    @PostMapping("/v1/publish/stream/team")
     public void publishToQuoromTeamQueue(@RequestParam("exchangeName") String exchange,  @RequestBody EventModel eventModel){
         LOGGER.info("Inside publish team queue start");
-        messageSender.sendToQuoromTeamQueue(exchange, eventModel);
+        messageSender.sendToStreamTeamQueue(exchange, eventModel);
         LOGGER.info("Inside publish team queue end");
     }
 
@@ -54,10 +54,10 @@ public class EventPublishController {
      * @param routingKey
      * @param eventModel
      */
-    @PostMapping("/v1/publish/quorom/tester")
+    @PostMapping("/v1/publish/stream/tester")
     public void publishToQuoromTesterQueue(@RequestParam("exchangeName") String exchange, @RequestParam("routingKey") String routingKey, @RequestBody EventModel eventModel){
         LOGGER.info("Inside publish tester queue start");
-        messageSender.sendToQuoromTesterQueue(exchange, routingKey, eventModel);
+        messageSender.sendToStreamTesterQueue(exchange, routingKey, eventModel);
         LOGGER.info("Inside publish tester queue end");
     }
 
@@ -68,14 +68,14 @@ public class EventPublishController {
      * @param department
      * @param message
      */
-    @PostMapping("/v1/publish/quorom/manager")
-    public void publishToQuoromManagerQueue(@RequestParam("exchangeName") String exchange, @RequestParam("department") String department, @RequestParam("messageData") String message){
+    @PostMapping("/v1/publish/stream/manager")
+    public void publishToStreamManagerQueue(@RequestParam("exchangeName") String exchange, @RequestParam("department") String department, @RequestParam("messageData") String message){
         LOGGER.info("Inside publish manager queue start");
         MessageProperties messageProperties = new MessageProperties();
         messageProperties.setHeader("department", department);
         MessageConverter messageConverter = new SimpleMessageConverter();
         Message messageData = messageConverter.toMessage(message, messageProperties);
-        messageSender.sendToQuoromManagerQueue(exchange, "", messageData);
+        messageSender.sendToStreamManagerQueue(exchange, "", messageData);
         LOGGER.info("Inside publish manager queue end");
     }
 

@@ -1,6 +1,6 @@
 package org.messageBroker.config;
 
-import com.messageBroker.eventpublisher.model.EventModel;
+import org.messageBroker.model.EventModel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class MessageSender {
      * @param routingKey
      * @param eventModel
      */
-    public void sendToQuoromDeveloperQueue(String exchange, String routingKey, EventModel eventModel) {
+    public void sendToStreamDeveloperQueue(String exchange, String routingKey, EventModel eventModel) {
         try{
             rabbitTemplate.convertAndSend(exchange, routingKey, eventModel);
         }
@@ -32,10 +32,10 @@ public class MessageSender {
      * Sends the message to the team queue
      *
      * @param exchange the type of exchange
-//     * @param message the message to be sent
+    * @param eventModel
      *
      */
-    public void sendToQuoromTeamQueue(String exchange, EventModel eventModel) {
+    public void sendToStreamTeamQueue(String exchange, EventModel eventModel) {
         try{
             rabbitTemplate.convertAndSend(exchange, "", eventModel);
         }
@@ -51,7 +51,7 @@ public class MessageSender {
      * @param eventModel the message to be sent
      *
      */
-    public void sendToQuoromTesterQueue(String exchange, String routingKey, EventModel eventModel) {
+    public void sendToStreamTesterQueue(String exchange, String routingKey, EventModel eventModel) {
         try{
             rabbitTemplate.convertAndSend(exchange, routingKey, eventModel);
         }
@@ -67,7 +67,7 @@ public class MessageSender {
      * @param message the message to be sent
      *
      */
-    public void sendToQuoromManagerQueue(String exchange, String routingKey, Message message) {
+    public void sendToStreamManagerQueue(String exchange, String routingKey, Message message) {
         try{
             rabbitTemplate.convertAndSend(exchange, routingKey, message);
         }

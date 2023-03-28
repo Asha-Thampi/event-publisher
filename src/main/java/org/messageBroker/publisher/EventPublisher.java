@@ -1,4 +1,4 @@
-package com.messageBroker.eventpublisher.publisher;
+package org.messageBroker.publisher;
 
 public class EventPublisher {
 

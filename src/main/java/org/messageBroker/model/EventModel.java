@@ -1,4 +1,4 @@
-package com.messageBroker.eventpublisher.model;
+package org.messageBroker.model;
 
 import java.io.Serializable;
 

@@ -1,6 +1,5 @@
-package com.messageBroker.eventpublisher.config;
+package org.messageBroker.config;
 
-import com.messageBroker.eventpublisher.endpoint.EventPublishController;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -17,35 +16,26 @@ import java.util.logging.Logger;
 @EnableRabbit
 public class SenderQueueConfig {
 
-    @Value("${rabbit.quorom.team.queue.name}")
-    private String quoromTeamQueue;
-    
-    @Value("${rabbit.quorom.developer.queue.name}")
-    private String quoromDeveloperQueue;
-
-    @Value("${rabbit.quorom.tester.queue.name}")
-    private String quoromTesterQueue;
-
-    @Value("${rabbit.quorom.manager.queue.name}")
-    private String quoromManagerQueue;
-
-    @Value("${rabbit.quorom.devops.queue.name}")
-    private String quoromDevopsQueue;
-
     @Value("${rabbit.stream.queue.name}")
     private String streamQueue;
 
-    @Value("${rabbit.quorom.queue.exchange}")
-    private String quoromQueueExchange;
+    @Value("${rabbit.stream.developer.queue.name}")
+    private String streamDeveloperQueue;
 
-    @Value("${rabbit.quorom.team.queue.routingKey}")
-    public String quoromTeamQueueRoutingKey;
+    @Value("${rabbit.stream.team.queue.name}")
+    private String streamTeamQueue;
+
+    @Value("${rabbit.stream.tester.queue.name}")
+    private String streamTesterQueue;
+
+    @Value("${rabbit.stream.manager.queue.name}")
+    private String streamManagerQueue;
+
+    @Value("${rabbit.stream.admin.queue.name}")
+    private String streamAdminQueue;
 
     @Value("${rabbit.quorom.developer.queue.routingKey}")
     public String quoromDeveloperQueueRoutingKey;
-
-    @Value("${rabbit.quorom.devops.queue.routingKey}")
-    public String quoromDevopsQueueRoutingKey;
 
     private final static Logger LOGGER = Logger.getLogger(SenderQueueConfig.class.getName());
 
@@ -80,58 +70,6 @@ public class SenderQueueConfig {
         return new HeadersExchange("headers-exchange");
     }
 
-    /**
-     * Binding for team queue
-     *
-     * @param quoromTeamQueue
-     * @param exchange
-     * @return
-     */
-    @Bean
-    Binding teamBinding(Queue quoromTeamQueue, FanoutExchange exchange) {
-        return BindingBuilder.bind(quoromTeamQueue).to(exchange);
-    }
-
-    /**
-     * Binding for developer queue
-     *
-     * @param quoromDeveloperQueue
-     * @param exchange
-     * @return
-     */
-    @Bean
-    Binding developerBinding(Queue quoromDeveloperQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(quoromDeveloperQueue).to(exchange).with(quoromDeveloperQueueRoutingKey);
-    }
-
-    @Bean
-    Binding devopsBinding(Queue quoromDevopsQueue, FanoutExchange exchange) {
-        return BindingBuilder.bind(quoromDevopsQueue).to(exchange);
-    }
-
-    /**
-     * Binding for tester queue
-     *
-     * @param quoromTesterQueue
-     * @param exchange
-     * @return
-     */
-    @Bean
-    Binding testerBinding(Queue quoromTesterQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(quoromTesterQueue).to(exchange).with("quorom_*");
-    }
-
-    /**
-     * Binding for tester queue
-     *
-     * @param quoromManagerQueue
-     * @param exchange
-     * @return
-     */
-    @Bean
-    Binding managerBinding(Queue quoromManagerQueue, HeadersExchange exchange) {
-        return BindingBuilder.bind(quoromManagerQueue).to(exchange).where("department").matches("manager");
-    }
 
     @Bean
     Binding streamBinding(Queue streamQueue, HeadersExchange exchange) {
@@ -139,63 +77,50 @@ public class SenderQueueConfig {
     }
 
     /**
+     * Binding the developer queue with the routing key
      *
-     * Queue Creation
+     * @param streamDeveloperQueue
+     * @param exchange
+     * @return binding
      *
-     */
-
-    /**
-     *
-     * Team queue of type quorom
-     *
-     * @return queue
      */
     @Bean
-    public Queue quoromTeamQueue() {
-        return  new Queue(quoromTeamQueue, true, false, false, Map.of(
-                "x-queue-type", "quorum"));
+    Binding streamDeveloperBinding(Queue streamDeveloperQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(streamDeveloperQueue).to(exchange).with(quoromDeveloperQueueRoutingKey);
     }
 
     /**
+     * Binding the team queue with the fanout exchange
      *
-     * Developer queue of type quorom
+     * @param streamTeamQueue
+     * @param exchange
+     * @return binding
      *
-     * @return queue
      */
     @Bean
-    public Queue quoromDeveloperQueue() {
-        return  new Queue(quoromDeveloperQueue, true, false, false, Map.of(
-                "x-queue-type", "quorum"));
-    }
-
-    @Bean
-    public Queue quoromDevopsQueue() {
-        return  new Queue(quoromDevopsQueue, true, false, false, Map.of(
-                "x-queue-type", "quorum"));
+    Binding streamTeamBinding(Queue streamTeamQueue, FanoutExchange exchange) {
+        return BindingBuilder.bind(streamTeamQueue).to(exchange);
     }
 
     /**
-     *
-     * Tester queue of type quorom
-     *
-     * @return queue
+     * Binding tester queue with
+     * @param streamTesterQueue
+     * @param exchange
+     * @return
      */
     @Bean
-    public Queue quoromTesterQueue() {
-        return  new Queue(quoromTesterQueue, true, false, false, Map.of(
-                "x-queue-type", "quorum"));
+    Binding streamTesterBinding(Queue streamTesterQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(streamTesterQueue).to(exchange).with("quorom_*");
     }
 
-    /**
-     *
-     * Manager queue of type quorom
-     *
-     * @return queue
-     */
     @Bean
-    public Queue quoromManagerQueue() {
-        return  new Queue(quoromManagerQueue, true, false, false, Map.of(
-                "x-queue-type", "quorum"));
+    Binding streamManagerBinding(Queue streamManagerQueue, HeadersExchange exchange) {
+        return BindingBuilder.bind(streamManagerQueue).to(exchange).where("department").matches("manager");
+    }
+
+    @Bean
+    Binding streamAdminBinding(Queue streamAdminQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(streamAdminQueue).to(exchange).with("quorom_*");
     }
 
     /**
@@ -209,6 +134,37 @@ public class SenderQueueConfig {
         return new Queue(streamQueue, true, false, false, Map.of(
                 "x-queue-type", "stream"));
     }
+
+    @Bean
+    public Queue streamDeveloperQueue() {
+        return new Queue(streamDeveloperQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
+
+    @Bean
+    public Queue streamTeamQueue() {
+        return new Queue(streamTeamQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
+
+    @Bean
+    public Queue streamTesterQueue() {
+        return new Queue(streamTesterQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
+
+    @Bean
+    public Queue streamManagerQueue() {
+        return new Queue(streamManagerQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
+
+    @Bean
+    public Queue streamAdminQueue() {
+        return new Queue(streamAdminQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
+
 
     /**
      * JSON Message converter bean
