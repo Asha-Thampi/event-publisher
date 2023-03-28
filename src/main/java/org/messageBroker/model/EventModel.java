@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class EventModel implements Serializable {
     private String id;
+    private String name;
     private String message;
 
     public String getId() {
@@ -12,6 +13,14 @@ public class EventModel implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getMessage() {
