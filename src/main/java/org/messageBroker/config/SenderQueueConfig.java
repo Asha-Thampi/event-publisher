@@ -70,7 +70,55 @@ public class SenderQueueConfig {
         return new HeadersExchange("headers-exchange");
     }
 
+    /**
+     *
+     * Stream queue of type stream
+     *
+     * @return queue
+     */
+    @Bean
+    public Queue streamQueue() {
+        return new Queue(streamQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
 
+    @Bean
+    public Queue streamDeveloperQueue() {
+        return new Queue(streamDeveloperQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
+
+    @Bean
+    public Queue streamTeamQueue() {
+        return new Queue(streamTeamQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
+
+    @Bean
+    public Queue streamTesterQueue() {
+        return new Queue(streamTesterQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
+
+    @Bean
+    public Queue streamManagerQueue() {
+        return new Queue(streamManagerQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
+
+    @Bean
+    public Queue streamAdminQueue() {
+        return new Queue(streamAdminQueue, true, false, false, Map.of(
+                "x-queue-type", "stream"));
+    }
+
+    /**
+     * Binding of stream queue with headers exchange
+     *
+     * @param streamQueue
+     * @param exchange
+     * @return binding
+     */
     @Bean
     Binding streamBinding(Queue streamQueue, HeadersExchange exchange) {
         return BindingBuilder.bind(streamQueue).to(exchange).where("department").matches("manager");
@@ -122,49 +170,6 @@ public class SenderQueueConfig {
     Binding streamAdminBinding(Queue streamAdminQueue, TopicExchange exchange) {
         return BindingBuilder.bind(streamAdminQueue).to(exchange).with("quorom_*");
     }
-
-    /**
-     *
-     * Stream queue of type stream
-     *
-     * @return queue
-     */
-    @Bean
-    public Queue streamQueue() {
-        return new Queue(streamQueue, true, false, false, Map.of(
-                "x-queue-type", "stream"));
-    }
-
-    @Bean
-    public Queue streamDeveloperQueue() {
-        return new Queue(streamDeveloperQueue, true, false, false, Map.of(
-                "x-queue-type", "stream"));
-    }
-
-    @Bean
-    public Queue streamTeamQueue() {
-        return new Queue(streamTeamQueue, true, false, false, Map.of(
-                "x-queue-type", "stream"));
-    }
-
-    @Bean
-    public Queue streamTesterQueue() {
-        return new Queue(streamTesterQueue, true, false, false, Map.of(
-                "x-queue-type", "stream"));
-    }
-
-    @Bean
-    public Queue streamManagerQueue() {
-        return new Queue(streamManagerQueue, true, false, false, Map.of(
-                "x-queue-type", "stream"));
-    }
-
-    @Bean
-    public Queue streamAdminQueue() {
-        return new Queue(streamAdminQueue, true, false, false, Map.of(
-                "x-queue-type", "stream"));
-    }
-
 
     /**
      * JSON Message converter bean

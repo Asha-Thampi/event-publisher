@@ -1,6 +1,6 @@
 package org.messageBroker.endpoint;
 
-import org.messageBroker.config.MessageSender;
+import org.messageBroker.publisher.MessageSender;
 import org.messageBroker.model.EventModel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;

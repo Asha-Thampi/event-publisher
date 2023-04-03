@@ -1,4 +1,4 @@
-package org.messageBroker.config;
+package org.messageBroker.publisher;
 
 import org.messageBroker.model.EventModel;
 import org.springframework.amqp.core.Message;
